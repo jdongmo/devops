@@ -1,15 +1,15 @@
 [submodule "roles/default-packages"]
-  path = roles/default-packages
-  url = git@github.com:jdongmo/default-packages.git
+	path = roles/default-packages
+	url = git@github.com:jdongmo/default-packages.git
 [submodule "roles/known_hosts"]
-  path = roles/known_hosts
-  url = git@github.com:jdongmo/known_hosts.git
+	path = roles/known_hosts
+	url = git@github.com:jdongmo/known_hosts.git
 [submodule "roles/sources.list"]
-  path = roles/sources.list
-  url = git@github.com:jdongmo/sources.list.git
+	path = roles/sources.list
+	url = git@github.com:jdongmo/sources.list.git
 [submodule "roles/ssh-authorized-keys"]
-  path = roles/ssh-authorized-keys
-  url = git@github.com:jdongmo/ssh-authorized-keys.git
+	path = roles/ssh-authorized-keys
+	url = git@github.com:jdongmo/ssh-authorized-keys.git
 [submodule "roles/ssh-config"]
-  path = roles/ssh-config
-  url = git@github.com:jdongmo/ssh-config.git
+	path = roles/ssh-config
+	url = git@github.com:jdongmo/ssh-config.git
