@@ -13,3 +13,9 @@
 [submodule "roles/ssh-config"]
 	path = roles/ssh-config
 	url = git@github.com:jdongmo/ssh-config.git
+[submodule "roles/aws_security_groups"]
+	path = roles/aws_security_groups
+	url = git@github.com:jdongmo/aws_security_groups.git
+[submodule "roles/aws_ec2"]
+	path = roles/aws_ec2
+	url = git@github.com:jdongmo/aws_ec2.git

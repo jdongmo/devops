@@ -1,4 +1,4 @@
-#!/usr/bin/env ash
+#!/usr/bin/env bash
 
 # ENV Vars:
 #   VAGRANT_MODE - [0,1] 
@@ -18,22 +18,26 @@ export VAULT_PASSWORD_FILE="${VAULT_PASSWORD_FILE:-./creds/vault_password.txt}"
 export VAGRANT_MODE="${VAGRANT_MODE:-0}"
 
 run_ansible() {
-  INOPTS=("$@")
+  INOPTS="$@"
   VAULTOPTS=""
   # Plaintext vault decryption key, not checked into SCM
-  if [[ -f ${VAULT_PASSWORD_FILE} ]]; then
+  if [ -f ${VAULT_PASSWORD_FILE} ]; then
     VAULTOPTS="--vault-password-file=${VAULT_PASSWORD_FILE}"
     [[ ${ANSIBLE_RUN_MODE} == 'playbook' ]] && \
-      ansible-playbook --diff "${ANSIBLE_PLAYBOOK_FILE}" $VAULTOPTS "${INOPTS[@]}"
+      #echo "ansible-playbook --diff $VAULTOPTS ${INOPTS[@]} ${ANSIBLE_PLAYBOOK_FILE}" && \
+      time ansible-playbook --diff $VAULTOPTS ${ANSIBLE_PLAYBOOK_FILE} ${INOPTS[@]}
     [[ ${ANSIBLE_RUN_MODE} == 'ad-hoc' ]] && \
-      ansible --diff "${INOPTS[@]}" $VAULTOPTS
+      #echo "ansible --diff $VAULTOPTS ${INOPTS[@]}" && \
+      time ansible --diff $VAULTOPTS ${INOPTS[@]}
   else
-    if [[ ${ANSIBLE_RUN_MODE} == 'playbook' ]]; then
+    if [ "${ANSIBLE_RUN_MODE}" == 'playbook' ]; then
       echo "Vault password file unreachable. Skip steps require vault."
-      VAULTOPTS="--skip-tags requires_vault"
-      ansible-playbook --diff "${ANSIBLE_PLAYBOOK_FILE}" $VAULTOPTS "${INOPTS[@]}"
-    elif [[ ${ANSIBLE_RUN_MODE} == 'ad-hoc' ]]; then
-      ansible --diff "${INOPTS[@]}" $VAULTOPTS
+      VAULTOPTS="--skip-tags=requires_vault"
+      #echo "ansible-playbook --diff $VAULTOPTS ${INOPTS[@]} ${ANSIBLE_PLAYBOOK_FILE}" && \
+      time ansible-playbook --diff $VAULTOPTS ${ANSIBLE_PLAYBOOK_FILE} ${INOPTS[@]}
+    elif [ "${ANSIBLE_RUN_MODE}" == 'ad-hoc' ]; then
+      #echo "ansible --diff $VAULTOPTS ${INOPTS[@]}" && \
+      time ansible --diff $VAULTOPTS ${INOPTS[@]}
     else
       echo "Invalid run mode: ${ANSIBLE_RUN_MODE}"
       exit 15
@@ -41,17 +45,11 @@ run_ansible() {
   fi
 }
 
-if [ $# -eq 0 ]; then
-  echo "No arguments provided, please provide at least one argument"
-  echo "Example: ./run.sh -v"
-  exit 1
-fi
-
-if [[ ${VAGRANT_MODE} == 1 ]]; then
+if [ ${VAGRANT_MODE} -eq 1 ]; then
   export ANSIBLE_SSH_ARGS="-o UserKnownHostsFile=/dev/null"
   export ANSIBLE_HOST_KEY_CHECKING=false
 fi
 
-time run_ansible "${@}"
+run_ansible "$@"
 retcode=$?
 exit $retcode

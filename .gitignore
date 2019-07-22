@@ -1,3 +1,4 @@
 # Ansible volatile directory
 .ansible
 *.swp
+*.retry
