@@ -174,7 +174,7 @@ def main():
   static = {'_meta': {'hostvars': {}}}
 
   static, static_hosts = load_static_inventory('/home/jdongmo/work/devops/inventory/',static)
-  static.update({'static': static_hosts})
+#  static.update(static_hosts)
   print(format(json.dumps(static, indent=2)))
 
 if __name__ == '__main__':
