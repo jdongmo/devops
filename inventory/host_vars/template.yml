@@ -1,0 +1,6 @@
+---
+groups:
+  ungrouped:
+    hosts:
+      test:
+...

@@ -1,0 +1,45 @@
+---
+secgroups:
+  - description: "Allow incoming ssh"
+    filters:
+    group_id:
+    group_name: "ssh"
+    ip_permissions:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: "0.0.0.0/0"
+    ip_permissions_egress: []
+    purge_rules:
+    purge_rules_egress:
+    purge_tags:
+    tags:
+      "env": "Development"
+      "provisioner": "ansible"
+    vpc_name: "GEE_DEV"
+    region: "us-west-2"
+  - description: "Allow incoming http(s)"
+    filters:
+#      "tag:env": "staging"
+#      "tag:provisioner": "ansible"
+    group_id:
+    group_name: "http(s)"
+    ip_permissions:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: "0.0.0.0/0"
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: "0.0.0.0/0"
+    ip_permissions_egress: []
+    purge_rules:
+    purge_rules_egress:
+    purge_tags: true
+    tags:
+      "env": "Development"
+      "provisioner": "ansible"
+    vpc_name: "GEE_DEV"
+    region: "us-west-2"
+...

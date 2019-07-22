@@ -1,0 +1,15 @@
+---
+vpcs:
+  - cidr_block: 192.168.5.0/24
+    region: "us-west-2"
+    dns_hostnames:
+    dns_support:
+    filters:
+    name: "GEE_DEV"
+    purge_cidrs:
+    tags:
+      "tag:env": "development"
+      "tag:provisioner": "ansible"
+      "tag:description": "Network cloud to for all dev/test services"
+    tenancy:
+...

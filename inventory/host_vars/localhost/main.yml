@@ -1,0 +1,9 @@
+---
+ansible_python_interpreter: "/usr/bin/python3"
+ansible_ssh_private_key_file: "~/.ssh/id_rsa"
+identityfiles:
+  - "{{ ansible_ssh_private_key_file }}"
+  - "~/.ssh/keys/mtn-infra-2019.pem"
+  - "~/.ssh/keys/28DevTeam.pem"
+linked_hosts: "{{ groups['ec2'] | list }}"
+...

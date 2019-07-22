@@ -1,0 +1,24 @@
+---
+instances:
+  - assign_public_ip: true
+    count_tag:
+      Name:
+    security_group_names: "ssh"
+    ec2_image_id: "ami-07b4f3c02c7f83d59"
+    exact_count: 1
+    instance_tags:
+      env: "staging"
+      provisioner: "ansible"
+      Name: "nexus-blabla"
+    instance_type: "t2.micro"
+    ec2_key_name: "2019-s2-ge-infra"
+    ec2_monitored: False
+    private_ip:
+    ec2_region: "us-west-2"
+    termination_protection:
+    volumes:
+    vpc_subnet: "gee_dev"
+    wait:
+    wait_timeout:
+    zone: ""
+...
