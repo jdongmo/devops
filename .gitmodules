@@ -19,3 +19,9 @@
 [submodule "roles/aws_ec2"]
 	path = roles/aws_ec2
 	url = git@github.com:jdongmo/aws_ec2.git
+[submodule "roles/aws_vpc"]
+	path = roles/aws_vpc
+	url = git@github.com:jdongmo/aws_vpc.git
+[submodule "roles/aws_subnet"]
+	path = roles/aws_subnet
+	url = git@github.com:jdongmo/aws_subnet.git
