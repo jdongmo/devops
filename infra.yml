@@ -1,0 +1,11 @@
+---
+- name: Create infra
+  hosts:
+    - localhost
+  gather_facts: no
+  roles:
+    - {role: aws_vpc, action: "present"}
+    - {role: aws_subnet, action: "present"}
+    - {role: aws_security_groups, action: "present"}
+    - {role: aws_ec2, action: "present"}
+...
