@@ -30,25 +30,25 @@ def static_to_dynamic_inventory(inputdict, hosts={}, groups={}, position='top'):
   outputdict = {'_meta': {'hostvars': {} }}
   newhosts = {}
   newgroups = {}
-  tmpdict = {}
   for k,v in inputdict.items():
     if k == 'groups' or k == 'children':
       for group in v:
-        newgroup = { group: { 'vars': {} }}
-        groups = data_merge(groups, newgroup)
+        if group not in groups:
+          groups.update({group: {}})
     if isinstance(v, dict):
       if 'children' in v:
-        newgroups = { k: { 'children': [], 'vars': {} } }
+        if not k in newgroups:
+          newgroups = { k: { 'children': [] }}
         for group in v['children']:
           newgroups[k]['children'].append(group)
-        groups = data_merge(groups, newgroups)
+        groups.update(newgroups)
       if 'groups' in v:
-        newgroups = { k: { 'children': [], 'vars': {} } }
+        if not k in newgroups:
+          newgroups = { k: { 'children': [] }}
         for group in v['groups']:
           newgroups[k]['children'].append(group)
-        groups = data_merge(groups, newgroups)
+        groups.update(newgroups)
       if 'hosts' in v:
-        newgroups = { k: { 'hosts': [] } }
         if isinstance(v['hosts'], list):
           msg = """
           Hosts should not be define as a list:
@@ -66,31 +66,32 @@ def static_to_dynamic_inventory(inputdict, hosts={}, groups={}, position='top'):
           sys.stderr.write(msg)
           exit(1)
         for host in list(v['hosts']):
-          if not v['hosts'][host]:
-            if host in newhosts:
-              pass
+          if k in groups:
+            if 'hosts' in groups[k]:
+              groups[k]['hosts'].append(host)
             else:
+              groups[k]['hosts'] = [host]
+          else:
+            groups.update({k: {'hosts': [host]}})
+          if v['hosts'][host] is None:
+            if not host in newhosts:
               newhosts[host] = {}
           elif 'vars' in v['hosts'][host]:
-            if host in newhosts:
-              newhosts[host].update(v['hosts'][host]['vars'])
-            else:
-              newhosts[host] = v['hosts'][host]['vars']
+              newhosts.update({host: v['hosts'][host]})
           else:
             for key,val in v['hosts'][host].items():
               if host in newhosts:
                 newhosts[host].update({key: val})
               else:
                 newhosts[host] = {key: val}
-          newgroups[k]['hosts'].append(host)
           hosts.update(newhosts)
-          groups.update(newgroups)
       if 'vars' in v:
-        if not v['vars']:
-          pass
-        elif position == 'group':
-          newgroups = { k: { 'vars': v['vars'] } }
-          groups = data_merge(groups, newgroups)
+        if position == 'group':
+          if k in newgroups:
+            newgroups[k].update({'vars': v['vars']})
+          else:
+            newgroups[k] = {'vars': v['vars']}
+          groups.update(newgroups)
       if k == 'groups' or k == 'children':
         newposition = 'group'
       elif k == 'hosts':
@@ -101,15 +102,12 @@ def static_to_dynamic_inventory(inputdict, hosts={}, groups={}, position='top'):
       if position == 'group':
         for word in v:
           if not word in valid_group_syntax:
-           # print("Syntax error in definition of group: {}".format(k), file=sys.stderr)
-           # print("\"{}\" is not a valid syntax key in group".format(word), file=sys.stderr)
-           # print("Exit on Error (1)", file=sys.stderr)
-           # exit(1)
-            pass
-      tmpdict = static_to_dynamic_inventory(v, hosts, groups, newposition)
+            print("Syntax error in definition of group: {}".format(k))
+            print("\"{}\" is not a valid syntax key in group".format(word))
+            exit(1)
+      outputdict.update(static_to_dynamic_inventory(v, hosts, groups, newposition))
   outputdict['_meta']['hostvars'].update(hosts)
   outputdict.update(groups)
-  outputdict.update(tmpdict)
   return outputdict
 
 #**********************************
@@ -157,15 +155,11 @@ def load_static_inventory(path, static):
          open(os.path.join(root, file), "rb").read()
         )
         if type(filecontent) == dict:
-#          print(root, file)
           filecontent = static_to_dynamic_inventory(filecontent)
-#          print(filecontent)
           if 'hostvars' in filecontent['_meta']:
             for hostname in filecontent['_meta']['hostvars']:
               static_hosts.append(hostname)
           static.update(filecontent)
-        else:
-          pass
   static_hosts = sorted(set(static_hosts))
   return static, static_hosts
 
@@ -173,9 +167,9 @@ def load_static_inventory(path, static):
 def main():
   static = {'_meta': {'hostvars': {}}}
 
-  static, static_hosts = load_static_inventory('/home/jdongmo/work/devops/inventory/',static)
-#  static.update(static_hosts)
+  static, static_hosts = load_static_inventory(os.path.dirname(__file__), static)
   print(format(json.dumps(static, indent=2)))
+  print(format(json.dumps(static_hosts, indent=2)))
 
 if __name__ == '__main__':
   main()
