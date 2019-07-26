@@ -169,7 +169,7 @@ def main():
 
   static, static_hosts = load_static_inventory(os.path.dirname(__file__), static)
   print(format(json.dumps(static, indent=2)))
-  print(format(json.dumps(static_hosts, indent=2)))
+  #print(format(json.dumps(static_hosts, indent=2)))
 
 if __name__ == '__main__':
   main()
