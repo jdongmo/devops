@@ -1,15 +1,21 @@
 ---
 subnets:
-  - cidr_block: 192.168.5.0/26
-    availability_zone: "us-west-2a"
-    region: "us-west-2"
+  - cidr_block: 10.5.0.128/26
+    availability_zone: "us-east-1a"
+    region: "us-east-1"
     filters:
-#      "tag:env": "staging"
-#      "tag:provisioner": "ansible"
-#      "tag:Name": "gee_dev"
     tags:
-      "Name": "gee_dev"
-      "env": "staging"
+      "Name": "generic-first-dev"
+      "env": "development"
       "provisioner": "ansible"
-    vpc_name: "GEE_DEV"
+    vpc_name: "generic-dev"
+  - cidr_block: 10.5.0.0/26
+    availability_zone: "us-east-1a"
+    region: "us-east-1"
+    filters:
+    tags:
+      "Name": "generic-second-dev"
+      "env": "development"
+      "provisioner": "ansible"
+    vpc_name: "generic-dev"
 ...

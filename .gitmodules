@@ -25,3 +25,9 @@
 [submodule "roles/aws_subnet"]
 	path = roles/aws_subnet
 	url = git@github.com:jdongmo/aws_subnet.git
+[submodule "roles/docker_deploy"]
+	path = roles/docker_deploy
+	url = git@github.com:jdongmo/docker_deploy.git
+[submodule "roles/aws_igw"]
+	path = roles/aws_igw
+	url = git@github.com:jdongmo/aws_igw.git

@@ -1,11 +1,11 @@
 ---
 vpcs:
-  - cidr_block: 192.168.5.0/24
-    region: "us-west-2"
+  - cidr_block: "10.5.0.0/16, 10.4.0.0/16" 
+    region: "us-east-1"
     dns_hostnames:
     dns_support:
     filters:
-    name: "GEE_DEV"
+    name: "generic-dev"
     purge_cidrs:
     tags:
       "tag:env": "development"

@@ -3,7 +3,7 @@ secgroups:
   - description: "Allow incoming ssh"
     filters:
     group_id:
-    group_name: "ssh"
+    group_name: "ssh-22"
     ip_permissions:
       - proto: tcp
         from_port: 22
@@ -14,32 +14,26 @@ secgroups:
     purge_rules_egress:
     purge_tags:
     tags:
-      "env": "Development"
+      "env": "development"
       "provisioner": "ansible"
-    vpc_name: "GEE_DEV"
-    region: "us-west-2"
-  - description: "Allow incoming http(s)"
+    vpc_name: "generic-dev"
+    region: "us-east-1"
+  - description: "Allow icmp internal"
     filters:
-#      "tag:env": "staging"
-#      "tag:provisioner": "ansible"
     group_id:
-    group_name: "http(s)"
+    group_name: "icmp-8"
     ip_permissions:
-      - proto: tcp
-        from_port: 80
-        to_port: 80
-        cidr_ip: "0.0.0.0/0"
-      - proto: tcp
-        from_port: 443
-        to_port: 443
+      - proto: icmp
+        from_port: 8
+        to_port: -1
         cidr_ip: "0.0.0.0/0"
     ip_permissions_egress: []
     purge_rules:
     purge_rules_egress:
-    purge_tags: true
+    purge_tags:
     tags:
-      "env": "Development"
+      "env": "development"
       "provisioner": "ansible"
-    vpc_name: "GEE_DEV"
-    region: "us-west-2"
+    vpc_name: "generic-dev"
+    region: "us-east-1"
 ...
