@@ -1,0 +1,21 @@
+---
+rtbs:
+  - filters:
+    propagating_vgw_ids:
+    purge_routes:
+    purge_subnets:
+    purge_tags:
+    region: "us-east-1"
+    route_table_id:
+    routes:
+      - dest: "0.0.0.0/0"
+        gateway_id: "igw"
+    subnets:
+      - generic-first-dev
+      - generic-second-dev
+    tags:
+      "Name": "dev"
+      "env": "development"
+      "provisioner": "ansible"
+    vpc_name: "generic-dev"
+...

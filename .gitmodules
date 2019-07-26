@@ -31,3 +31,6 @@
 [submodule "roles/aws_igw"]
 	path = roles/aws_igw
 	url = git@github.com:jdongmo/aws_igw.git
+[submodule "roles/aws_rtb"]
+	path = roles/aws_rtb
+	url = git@github.com:jdongmo/aws_rtb.git
