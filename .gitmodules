@@ -34,3 +34,6 @@
 [submodule "roles/aws_rtb"]
 	path = roles/aws_rtb
 	url = git@github.com:jdongmo/aws_rtb.git
+[submodule "roles/aws_route53"]
+	path = roles/aws_route53
+	url = git@github.com:jdongmo/aws_route53.git

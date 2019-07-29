@@ -5,9 +5,39 @@
   gather_facts: no
   roles:
     - {role: aws_vpc, action: "present"}
+    - {role: aws_route53, action: "zadd"}
     - {role: aws_subnet, action: "present"}
     - {role: aws_igw, action: "present"}
     - {role: aws_rtb, action: "present"}
     - {role: aws_security_groups, action: "present"}
     - {role: aws_ec2, action: "present"}
+
+- name: Update AWS DNS
+  hosts:
+    - ec2
+  gather_facts: no
+  pre_tasks:
+    - name: set record
+      set_fact:
+        records:
+          - record: "{{ ec2_tag_Name }}-int.{{ ec2_tag_domain | default(zone,
+            true) }}"
+            region: "{{ ec2_region }}"
+            type: 'A'
+            value: "{{ ec2_private_ip_address }}"
+            vpc_name: "generic-dev"
+            zone: "{{ ec2_tag_domain | default(zone, true) }}"
+          - record: "{{ ec2_tag_Name }}.{{ ec2_tag_domain | default(zone,
+            true) }}"
+            region: "{{ ec2_region }}"
+            type: 'A'
+            value: "{{ ec2_ip_address }}"
+            vpc_name: "generic-dev"
+            zone: "{{ ec2_tag_domain | default(zone, true) }}"
+    - name: Get records
+      import_role:
+        name: aws_route53
+      vars:
+        action: "present"
+      delegate_to: localhost
 ...
