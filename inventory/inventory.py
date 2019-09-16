@@ -146,13 +146,14 @@ def load_static_inventory(path, static):
 
   static_hosts = []
   #get all *.yml files
-  for root, directory, filename in os.walk(path):
+  for root, directory, filename in sorted(os.walk(path)):
     for file in filename:
       if file.endswith(('.yml', '.yaml')):
         files['static']['files'].append(os.path.join(root, file))
         filecontent = None
         filecontent = yaml.load(
-         open(os.path.join(root, file), "rb").read()
+         open(os.path.join(root, file), "rb").read(),
+         Loader=yaml.FullLoader
         )
         if type(filecontent) == dict:
           filecontent = static_to_dynamic_inventory(filecontent)
