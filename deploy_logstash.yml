@@ -1,0 +1,13 @@
+---
+- name: Provision logstash
+  hosts:
+    - logstash
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: default-packages
+    - role: docker-engine
+    - role: logstash
+    - role: docker_deploy
+      docker_apps: "{{ logstash_docker_apps }}"
+...
