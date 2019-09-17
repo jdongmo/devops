@@ -18,6 +18,9 @@ PyYAML==5.1
 six
 openshift
 
+## Azure
+'ansible[azure]'
+
 ## misc explicit needs
 awscli
 appdirs
