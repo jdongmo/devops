@@ -37,3 +37,36 @@
 [submodule "roles/aws_route53"]
 	path = roles/aws_route53
 	url = git@github.com:jdongmo/aws_route53.git
+[submodule "roles/attach_disk"]
+	path = roles/attach_disk
+	url = git@github.com:jdongmo/attach_disk.git
+[submodule "roles/nexus3-oss"]
+	path = roles/nexus3-oss
+	url = git@github.com:jdongmo/nexus3-oss
+[submodule "roles/aws_eip"]
+	path = roles/aws_eip
+	url = git@github.com:jdongmo/aws_eip.git
+[submodule "roles/aws_elb"]
+	path = roles/aws_elb
+	url = git@github.com:jdongmo/aws_elb.git
+[submodule "roles/docker-engine"]
+	path = roles/docker-engine
+	url = git@github.com:jdongmo/docker-engine.git
+[submodule "roles/hostname"]
+	path = roles/hostname
+	url = git@github.com:jdongmo/hostname.git
+[submodule "roles/java"]
+	path = roles/java
+	url = git@github.com:jdongmo/java.git
+[submodule "roles/logstash"]
+	path = roles/logstash
+	url = git@github.com:jdongmo/logstash.git
+[submodule "roles/nginx"]
+	path = roles/nginx
+	url = git@github.com:jdongmo/nginx.git
+[submodule "roles/strongswan"]
+	path = roles/strongswan
+	url = git@github.com:jdongmo/strongswan.git
+[submodule "roles/sysctl"]
+	path = roles/sysctl
+	url = git@github.com:jdongmo/sysctl.git
