@@ -1,0 +1,15 @@
+---
+- name: Sonatype Nexus OSS
+  hosts:
+    - nexus
+  become: yes
+  roles:
+    - role: attach_disk
+      tags: disk
+    - role: java
+      tags: java
+    - role: nexus3-oss
+      tags: nexus
+    - role: nginx
+      tags: nginx
+...
