@@ -1,0 +1,9 @@
+---
+- name: Setup ssh configuration
+  hosts:
+    - localhost
+  gather_facts: no
+  roles:
+    - {role: ssh-config}
+    - {role: known_hosts}
+...

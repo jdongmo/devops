@@ -1,0 +1,37 @@
+---
+- name: Update AWS HOST DNS
+  hosts:
+    - ec2
+  gather_facts: no
+  pre_tasks:
+    - name: set record
+      set_fact:
+        records:
+          - record: "{{ ec2_tag_Name }}-int.{{ ec2_tag_domain | default(zone, true) }}"
+            region: "{{ ec2_region }}"
+            type: 'A'
+            value: "{{ ec2_private_ip_address }}"
+            zone: "{{ ec2_tag_domain | default(zone, true) }}"
+          - record: "{{ ec2_tag_Name }}.{{ ec2_tag_domain | default(zone, true) }}"
+            region: "{{ ec2_region }}"
+            type: 'A'
+            value: "{{ ec2_ip_address }}"
+            zone: "{{ ec2_tag_domain | default(zone, true) }}"
+      tags:
+        - "dns"
+    - name: Get records
+      import_role:
+        name: aws_route53
+      vars:
+        action: "present"
+      delegate_to: localhost
+      tags:
+        - "dns"
+
+- name: Update other records
+  hosts:
+    - localhost
+  gather_facts: no
+  roles:
+    - {role: aws_route53, action: "present", tags: ["dns"]}
+...
