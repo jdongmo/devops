@@ -14,11 +14,37 @@ secgroups:
     purge_rules_egress:
     purge_tags:
     tags:
-      "env": "development"
+      "env": "test"
       "provisioner": "ansible"
-    vpc_name: "generic-dev"
-    region: "us-east-1"
-  - description: "Allow icmp internal"
+    vpc_name: "test-vpc"
+    region: "us-east-2"
+  - description: "Allow incoming http"
+    group_name: "http-80"
+    ip_permissions:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: "0.0.0.0/0"
+    ip_permissions_egress: []
+    tags:
+      "env": "test"
+      "provisioner": "ansible"
+    vpc_name: "test-vpc"
+    region: "us-east-2"
+  - description: "Allow incoming https"
+    group_name: "https-443"
+    ip_permissions:
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: "0.0.0.0/0"
+    ip_permissions_egress: []
+    tags:
+      "env": "test"
+      "provisioner": "ansible"
+    vpc_name: "test-vpc"
+    region: "us-east-2"
+  - description: "Allow icmp"
     filters:
     group_id:
     group_name: "icmp-8"
@@ -32,8 +58,34 @@ secgroups:
     purge_rules_egress:
     purge_tags:
     tags:
-      "env": "development"
+      "env": "test"
       "provisioner": "ansible"
-    vpc_name: "generic-dev"
-    region: "us-east-1"
+    vpc_name: "test-vpc"
+    region: "us-east-2"
+  - description: "Port 5044"
+    group_name: "tcp-5044"
+    ip_permissions:
+      - proto: tcp
+        from_port: 5044
+        to_port: 5044
+        cidr_ip: "0.0.0.0/0"
+    ip_permissions_egress: []
+    tags:
+      "env": "test"
+      "provisioner": "ansible"
+    vpc_name: "test-vpc"
+    region: "us-east-2"
+  - description: "Port 9050"
+    group_name: "tcp-9050"
+    ip_permissions:
+      - proto: tcp
+        from_port: 9050
+        to_port: 9050
+        cidr_ip: "0.0.0.0/0"
+    ip_permissions_egress: []
+    tags:
+      "env": "test"
+      "provisioner": "ansible"
+    vpc_name: "test-vpc"
+    region: "us-east-2"
 ...

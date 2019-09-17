@@ -1,0 +1,13 @@
+---
+records:
+  - record:
+    region:
+    type: 'A'
+    value:
+    zone: "testzone.io"
+  - record:
+    region:
+    type: 'CNAME'
+    value:
+    zone: "testzone.io"
+...

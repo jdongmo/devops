@@ -1,21 +1,12 @@
 ---
 subnets:
-  - cidr_block: 10.5.0.128/26
-    availability_zone: "us-east-1a"
-    region: "us-east-1"
+  - cidr_block: 10.5.0.0/24
+    availability_zone: "us-east-2a"
+    region: "us-east-2"
     filters:
     tags:
-      "Name": "generic-first-dev"
-      "env": "development"
+      "Name": "subnet-test"
+      "env": "test"
       "provisioner": "ansible"
-    vpc_name: "generic-dev"
-  - cidr_block: 10.5.0.0/26
-    availability_zone: "us-east-1a"
-    region: "us-east-1"
-    filters:
-    tags:
-      "Name": "generic-second-dev"
-      "env": "development"
-      "provisioner": "ansible"
-    vpc_name: "generic-dev"
+    vpc_name: "test-vpc"
 ...

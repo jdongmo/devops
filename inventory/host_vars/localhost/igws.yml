@@ -1,9 +1,9 @@
 ---
 igws:
-  - region: "us-east-1"
+  - region: "us-east-2"
     tags:
-      "Name": "dev"
-      "env": "development"
+      "Name": "test-igw"
+      "env": "test"
       "provisioner": "ansible"
-    vpc_name: "generic-dev"
+    vpc_name: "test-vpc"
 ...

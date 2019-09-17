@@ -1,7 +1,7 @@
 ---
 zones:
-  - comment: "Private zone for dev account"
-    domain: "dev.devops.io"
-    region: "us-east-1"
-    vpc_name: "generic-dev"
+  - comment: "test zone"
+    domain: "testzone.io"
+    region:
+    vpc_name:
 ...

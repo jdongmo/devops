@@ -1,15 +1,15 @@
 ---
 vpcs:
   - cidr_block: "10.5.0.0/16, 10.4.0.0/16" 
-    region: "us-east-1"
+    region: "us-east-2"
     dns_hostnames:
     dns_support:
     filters:
-    name: "generic-dev"
+    name: "test-vpc"
     purge_cidrs:
     tags:
-      "tag:env": "development"
+      "tag:env": "test"
       "tag:provisioner": "ansible"
-      "tag:description": "Network cloud to for all dev/test services"
+      "tag:description": "Network cloud testing purpose"
     tenancy:
 ...

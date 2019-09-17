@@ -1,0 +1,6 @@
+---
+eips:
+  - ip:
+    instance:
+    region: "us-east-2"
+...

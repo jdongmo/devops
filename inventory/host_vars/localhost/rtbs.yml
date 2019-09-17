@@ -5,17 +5,16 @@ rtbs:
     purge_routes:
     purge_subnets:
     purge_tags:
-    region: "us-east-1"
+    region: "us-east-2"
     route_table_id:
     routes:
       - dest: "0.0.0.0/0"
         gateway_id: "igw"
     subnets:
-      - generic-first-dev
-      - generic-second-dev
+      - subnet-test
     tags:
-      "Name": "dev"
-      "env": "development"
+      "Name": "test-route"
+      "env": "test"
       "provisioner": "ansible"
-    vpc_name: "generic-dev"
+    vpc_name: "test-vpc"
 ...
