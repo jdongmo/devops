@@ -1,0 +1,17 @@
+version: "3.6"
+services:
+
+  buildenv:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ansible-buildenv
+    environment:
+      AWS_REGION: "${AWS_REGION}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      VAULT_PASSWORD_FILE: "${VAULT_PASSWORD_FILE:-$HOME/.ssh/creds/vault_password.txt}"
+      ANSIBLE_PLAYBOOK_FILE: "${ANSIBLE_PLAYBOOK_FILE:-infra.yml}"
+    volumes:
+      - "${HOME}/.ssh:/root/ssh"
+      - "${PWD}:/opt/devops"

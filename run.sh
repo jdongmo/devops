@@ -14,30 +14,37 @@
 
 export ANSIBLE_RUN_MODE="${ANSIBLE_RUN_MODE:-playbook}"
 export ANSIBLE_PLAYBOOK_FILE="${ANSIBLE_PLAYBOOK_FILE:-infra.yml}"
-export VAULT_PASSWORD_FILE="${VAULT_PASSWORD_FILE:-./creds/vault_password.txt}"
+export VAULT_PASSWORD_FILE="${VAULT_PASSWORD_FILE:-${HOME}/.ssh/creds/vault_password.txt}"
 export VAGRANT_MODE="${VAGRANT_MODE:-0}"
 
+# Fix for strange mounting issues. Should find a better solution.
+if [ -d "/root/ssh" ];then cp -R /root/ssh /root/.ssh; fi
+if [ -d "/root/devops" ];then cp -R /root/devops/* /opt/devops; fi
+
 run_ansible() {
-  INOPTS="$@"
+  INOPTS=( "$@" )
   VAULTOPTS=""
   # Plaintext vault decryption key, not checked into SCM
-  if [ -f ${VAULT_PASSWORD_FILE} ]; then
+  if [ -f "${VAULT_PASSWORD_FILE}" ]; then
     VAULTOPTS="--vault-password-file=${VAULT_PASSWORD_FILE}"
-    [[ ${ANSIBLE_RUN_MODE} == 'playbook' ]] && \
-      #echo "ansible-playbook --diff $VAULTOPTS ${INOPTS[@]} ${ANSIBLE_PLAYBOOK_FILE}" && \
-      time ansible-playbook --diff $VAULTOPTS ${ANSIBLE_PLAYBOOK_FILE} ${INOPTS[@]}
-    [[ ${ANSIBLE_RUN_MODE} == 'ad-hoc' ]] && \
-      #echo "ansible --diff $VAULTOPTS ${INOPTS[@]}" && \
-      time ansible --diff $VAULTOPTS ${INOPTS[@]}
+    if [ ${ANSIBLE_RUN_MODE} == 'playbook' ]; then
+      time ansible-playbook --diff "${VAULTOPTS}" "${ANSIBLE_PLAYBOOK_FILE}" "${INOPTS[@]}"
+      return $?
+    elif [ ${ANSIBLE_RUN_MODE} == 'ad-hoc' ]; then
+      time ansible --diff "${VAULTOPTS}" "${INOPTS[@]}"
+      return $?
+    fi
   else
     if [ "${ANSIBLE_RUN_MODE}" == 'playbook' ]; then
       echo "Vault password file unreachable. Skip steps require vault."
       VAULTOPTS="--skip-tags=requires_vault"
       #echo "ansible-playbook --diff $VAULTOPTS ${INOPTS[@]} ${ANSIBLE_PLAYBOOK_FILE}" && \
-      time ansible-playbook --diff $VAULTOPTS ${ANSIBLE_PLAYBOOK_FILE} ${INOPTS[@]}
+      time ansible-playbook --diff "${VAULTOPTS}" "${ANSIBLE_PLAYBOOK_FILE}" "${INOPTS[@]}"
+      return $?
     elif [ "${ANSIBLE_RUN_MODE}" == 'ad-hoc' ]; then
       #echo "ansible --diff $VAULTOPTS ${INOPTS[@]}" && \
-      time ansible --diff $VAULTOPTS ${INOPTS[@]}
+      time ansible --diff "${VAULTOPTS}" "${INOPTS[@]}"
+      return $?
     else
       echo "Invalid run mode: ${ANSIBLE_RUN_MODE}"
       exit 15
@@ -45,7 +52,7 @@ run_ansible() {
   fi
 }
 
-if [ ${VAGRANT_MODE} -eq 1 ]; then
+if [ "${VAGRANT_MODE}" -eq 1 ]; then
   export ANSIBLE_SSH_ARGS="-o UserKnownHostsFile=/dev/null"
   export ANSIBLE_HOST_KEY_CHECKING=false
 fi

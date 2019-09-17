@@ -4,7 +4,7 @@ RUN apk update && \
   apk upgrade
 
 RUN apk add --no-cache make gcc musl-dev openssl-dev openssh-client \
-  python3 python3-dev libffi libffi-dev && \
+  python3 python3-dev libffi libffi-dev vi bash && \
   ln -s /usr/bin/python3 /usr/bin/python
 
 RUN pip3 install --upgrade pip
@@ -13,5 +13,3 @@ WORKDIR /opt/devops
 COPY . /opt/devops
 
 RUN pip3 install --requirement requirements.txt
-
-RUN apk add --no-cache vi bash
