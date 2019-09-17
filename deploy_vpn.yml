@@ -1,0 +1,9 @@
+---
+- name: Provision vpn
+  hosts:
+    - vpn
+  become: yes
+  roles:
+    - role: sysctl
+    - role: strongswan
+...
