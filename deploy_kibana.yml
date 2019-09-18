@@ -1,0 +1,13 @@
+---
+- name: Provision kibana
+  hosts:
+    - kibana
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: default-packages
+    - role: docker-engine
+#    - role: kibana
+    - role: docker_deploy
+      docker_apps: "{{ kibana_docker_apps }}"
+...

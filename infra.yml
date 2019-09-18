@@ -16,7 +16,7 @@
 - name: Configure machines
   hosts:
     - all, !localhost
-  gather_facts: no
+  gather_facts: yes
   roles:
     - {role: hostname, tags: ["hostname"]}
     - {role: default-packages}

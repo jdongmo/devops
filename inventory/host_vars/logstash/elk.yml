@@ -1,0 +1,126 @@
+---
+groups:
+  logstash:
+    hosts:
+      elk:
+        app_dir: "/app"
+        apt_default_packages:
+          - python3
+          - python3-pip
+        sysctl_options:
+          vm.max_map_count: 262144
+          vm.nr_hugepages: -1
+        dockerce_version: "=5:19.03.1~3-0~ubuntu-bionic"
+        docker_home: "{{ app_dir }}/docker"
+        storage_driver: "overlay2"
+        ## Logstash config
+        logstash_conf_dir: "{{ app_dir }}/logstash/etc"
+        logstash_ssl_dir: "{{ logstash_conf_dir }}/ssl"
+        logstash_ssl_ca_file:
+        logstash_ssl_certificate_file:
+        logstash_ssl_key_file:
+        logstash_pipeline_dir: "{{ logstash_conf_dir }}/conf.d"
+        logstash_settings:
+          - http.host: "0.0.0.0"
+          - path.data: /usr/share/logstash/data
+          - dead_letter_queue.enable: True
+        #logstash_heap_size: "{{ (ansible_memory_mb.real.total - 1024) | int }}m"
+        logstash_heap_size: "512m"
+        logstash_jmxremote_port: 9050
+        logstash_java_opts: >-
+          -Dcom.sun.management.jmxremote.port={{ logstash_jmxremote_port }}
+          -Dcom.sun.management.jmxremote.local.only=false
+          -Dcom.sun.management.jmxremote.authenticate=false
+          -Dcom.sun.management.jmxremote.ssl=false
+          -Djava.rmi.server.hostname=0.0.0.0
+        logstash_es_output:
+          - "172.17.0.2:9200"
+        logstash_pipelines:
+          main:
+            path.config: "/usr/share/logstash/pipeline/main"
+            filters:
+              - "10-syslog.conf"
+            custom_filters: |-
+            config: |-
+              input {
+                file {
+                  path => "/tmp/syslog.log"
+                  start_position => "beginning"
+                }
+              }
+              output {
+                elasticsearch {
+                  hosts => {{ logstash_es_output | to_json }}
+                  sniffing => true
+                  index => "AP-%{+YYYY.MM.dd}"
+                }
+                if [index]{
+                  elasticsearch {
+                    hosts => {{ logstash_es_output | to_json }}
+                    sniffing => true
+                    index => "%{index}-%{+YYYY.MM.dd}"
+                  }
+                }
+                else {
+                  elasticsearch {
+                    hosts => {{ logstash_es_output | to_json }}
+                    sniffing => true
+                    index => "logstash-%{type}-%{+YYYY.MM.dd}"
+                  }
+                }
+              }
+        logstash_docker_apps:
+          - name: logstash
+            app_version: 6.8.2
+            docker:
+              image: 'logstash'
+              expose:
+                - 9050
+                - 5044
+              ports:
+                - "9050:9050"
+                - "5044:5044"
+              log_driver: 'json-file'
+              log_options:
+                max-size: 100m
+              volumes:
+                - "{{ logstash_conf_dir }}/:/usr/share/logstash/config/"
+                - "{{ logstash_pipeline_dir }}/:/usr/share/logstash/pipeline/"
+        elastic_docker_apps:
+          - name: elastic
+            app_version: 7.3.2
+            docker:
+              image: 'elasticsearch'
+              expose:
+                - 9200
+                - 9300
+              ports:
+                - "9200:9200"
+                - "9300:9300"
+              log_driver: 'json-file'
+              log_options:
+                max-size: 100m
+              ulimits:
+                - "memlock:-1:-1"
+              env:
+                node.name: "elastic01"
+                discovery.seed_hosts: ""
+                cluster.initial_master_nodes: "elastic01"
+                cluster.name: "elastic-cluster"
+                bootstrap.memory_lock: "true"
+                ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+        kibana_docker_apps:
+          - name: kibana
+            app_version: 7.3.2
+            docker:
+              image: 'kibana'
+              expose:
+                - 5601
+              ports:
+                - "5601:5601"
+              log_driver: 'json-file'
+              log_options:
+                max-size: 100m
+              env:
+                ELASTICSEARCH_HOSTS: "http://172.17.0.2:9200"
+...

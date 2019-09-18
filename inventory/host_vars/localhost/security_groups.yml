@@ -75,6 +75,19 @@ secgroups:
       "provisioner": "ansible"
     vpc_name: "test-vpc"
     region: "us-east-2"
+  - description: "Port 5601"
+    group_name: "tcp-5601"
+    ip_permissions:
+      - proto: tcp
+        from_port: 5601
+        to_port: 5601
+        cidr_ip: "0.0.0.0/0"
+    ip_permissions_egress: []
+    tags:
+      "env": "test"
+      "provisioner": "ansible"
+    vpc_name: "test-vpc"
+    region: "us-east-2"
   - description: "Port 9050"
     group_name: "tcp-9050"
     ip_permissions:

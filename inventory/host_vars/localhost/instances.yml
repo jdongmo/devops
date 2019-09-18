@@ -10,11 +10,11 @@ instances:
       provisioner: "ansible"
       Name: "elk"
       domain: "testzone.io"
-    instance_type: "t2.micro"
+    instance_type: "t3.medium"
     ec2_key_name: "aws-2019-2020"
     ec2_monitored: False
     ec2_region: "us-east-2"
-    vpc_subnet: "subnet-test"
+    vpc_subnet: "test-subnet"
     volumes:
       - device_name: '/dev/sda1'
         delete_on_termination: true

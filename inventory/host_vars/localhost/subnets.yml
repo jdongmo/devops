@@ -4,8 +4,9 @@ subnets:
     availability_zone: "us-east-2a"
     region: "us-east-2"
     filters:
+    purge_tags: true
     tags:
-      "Name": "subnet-test"
+      "Name": "test-subnet"
       "env": "test"
       "provisioner": "ansible"
     vpc_name: "test-vpc"

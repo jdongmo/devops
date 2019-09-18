@@ -1,0 +1,6 @@
+---
+groups:
+  logstash:
+    hosts:
+      elk:
+...
