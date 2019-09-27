@@ -2,7 +2,7 @@
 instances:
   - assign_public_ip: true
     count_tag:
-    security_group_names: "ssh-22,icmp-8,tcp-5044,tcp-9050,http-80,https-443"
+    security_group_names: "ssh-22,icmp-8,tcp-5601,https-443"
     ec2_image_id: "ami-05c1fa8df71875112"
     exact_count: 1
     instance_tags:
