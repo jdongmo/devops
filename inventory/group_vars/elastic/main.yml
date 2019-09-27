@@ -1,0 +1,6 @@
+---
+groups:
+  elastic:
+    hosts:
+      elk:
+...

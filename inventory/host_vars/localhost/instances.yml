@@ -2,7 +2,7 @@
 instances:
   - assign_public_ip: true
     count_tag:
-    security_group_names: "ssh-22,icmp-8,tcp-5044,tcp-9050,http-80,https-443"
+    security_group_names: "ssh-22,icmp-8,tcp-5601,https-443"
     ec2_image_id: "ami-05c1fa8df71875112"
     exact_count: 1
     instance_tags:
@@ -10,11 +10,11 @@ instances:
       provisioner: "ansible"
       Name: "elk"
       domain: "testzone.io"
-    instance_type: "t2.micro"
+    instance_type: "t3.medium"
     ec2_key_name: "aws-2019-2020"
     ec2_monitored: False
     ec2_region: "us-east-2"
-    vpc_subnet: "subnet-test"
+    vpc_subnet: "test-subnet"
     volumes:
       - device_name: '/dev/sda1'
         delete_on_termination: true

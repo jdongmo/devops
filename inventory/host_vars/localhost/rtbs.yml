@@ -11,7 +11,7 @@ rtbs:
       - dest: "0.0.0.0/0"
         gateway_id: "igw"
     subnets:
-      - subnet-test
+      - 'test-subnet'
     tags:
       "Name": "test-route"
       "env": "test"

@@ -1,7 +1,9 @@
 ---
-ansible_ssh_common_args: "-o ProxyCommand='ssh -W %h:%p -q {{ proxy.ssh_user }}@{{ proxy.ssh_host }}'"
+#ansible_ssh_common_args: "-o ProxyCommand='ssh -W %h:%p -q {{ proxy.ssh_user }}@{{ proxy.ssh_host }}'"
 ansible_ssh_private_key_file: "~/.ssh/id_rsa"
 ansible_user: ubuntu
+ip_address: "{{ ansible_host | default(inventory_hostname) }}"
+fqdn: "{{ inventory_hostname }}.{{ zone }}"
 mail: "service@testzone.io"
 identityfiles:
   - "{{ ansible_ssh_private_key_file }}"
@@ -9,7 +11,7 @@ ldaps:
   - node: x.x.x.x
     port: 389
 proxy:
-  ssh_user: user
-  ssh_host: 1.1.1.1
+  ssh_user: ''
+  ssh_host: ''
   ssh_key: "~/.ssh/key/proxy"
 ...

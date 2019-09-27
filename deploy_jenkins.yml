@@ -1,0 +1,47 @@
+---
+- name: Provision jenkins
+  hosts:
+    - jenkins
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: attach_disk
+      tags: disk
+    - role: python
+    - role: docker-engine
+    - role: docker_deploy
+      docker_apps: "{{ jenkins_docker_apps }}"
+      docker_apps_env: "{{ jenkins_node_env }}"
+    - role: nexus_backup_config
+      nexus_backup_config_apps: "{{ jenkins_nexus_backup_config_apps }}"
+  tasks:
+    - name: Create directories
+      file:
+        path: "{{ item }}"
+        owner: root
+        group: root
+        mode: "0755"
+        state: "directory"
+      with_items:
+        - "/root/.ssh/creds"
+        - "/root/.ssh/keys"
+
+    - name: Copy ssh keys
+      copy:
+        dest: "{{ item.dest }}"
+        content: "{{ item.content }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: "{{ item.mode }}"
+      with_items: "{{ _jenkins_ssh_keys }}"
+      no_log: true
+
+    - name: Copy creds into jenkins
+      copy:
+        src: "/root/.ssh/creds/vault_password.txt"
+        dest: "/root/.ssh/creds/vault_password.txt"
+        owner: root
+        group: root
+        mode: "0644"
+      no_log: true
+...

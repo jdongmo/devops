@@ -4,8 +4,9 @@ ansible_ssh_private_key_file: "~/.ssh/id_rsa"
 identityfiles:
   - "{{ ansible_ssh_private_key_file }}"
 linked_hosts: "{{ groups['ec2'] | sort }}"
+force: true
 proxy:
-  ssh_user:
-  ssh_host:
-  ssh_key:
+  ssh_user: ''
+  ssh_host: ''
+  ssh_key: ''
 ...
