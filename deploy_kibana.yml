@@ -7,7 +7,7 @@
   roles:
     - role: default-packages
     - role: docker-engine
-#    - role: kibana
+    - role: kibana
     - role: docker_deploy
       docker_apps: "{{ kibana_docker_apps }}"
 ...
