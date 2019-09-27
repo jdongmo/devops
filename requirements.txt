@@ -19,7 +19,8 @@ six
 openshift
 
 ## Azure
-'ansible[azure]'
+ansible[azure]
+#`pip install 'azure>=2.0.0' --upgrade`) - No module named 'msrestazure'
 
 ## misc explicit needs
 awscli
