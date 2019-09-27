@@ -12,12 +12,11 @@
     - {role: aws_ec2, action: "present", tags: ["aws", "ec2"]}
     - {role: aws_eip, action: "present", tags: ["aws", "eip"]}
 
-
 - name: Configure machines
   hosts:
     - all, !localhost
   gather_facts: yes
   roles:
-    - {role: hostname, tags: ["hostname"]}
-    - {role: default-packages}
+    - {role: hostname, tags: ["hostname", "config"]}
+    - {role: default-packages, tags: ["package", "config"]}
 ...
