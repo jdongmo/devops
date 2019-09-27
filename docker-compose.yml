@@ -10,8 +10,8 @@ services:
       AWS_REGION: "${AWS_REGION}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
-      VAULT_PASSWORD_FILE: "${VAULT_PASSWORD_FILE:-$HOME/.ssh/creds/vault_password.txt}"
+      VAULT_PASSWORD_FILE: "${VAULT_PASSWORD_FILE:-/home/ansible-user/.ssh/creds/vault_password.txt}"
       ANSIBLE_PLAYBOOK_FILE: "${ANSIBLE_PLAYBOOK_FILE:-infra.yml}"
     volumes:
-      - "${HOME}/.ssh:/root/ssh"
+      - "${HOME}/.ssh:/home/ansible-user/.ssh"
       - "${PWD}:/opt/devops"
