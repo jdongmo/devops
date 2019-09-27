@@ -35,37 +35,82 @@ groups:
           -Djava.rmi.server.hostname=0.0.0.0
         logstash_es_output:
           - "172.17.0.2:9200"
+        logstash_es_template:
+          - file: "ap_mapping.json"
+            mapping: |-
+              {
+                "index_patterns": ["ap-*"],
+                "mappings": {
+                  "properties": {
+                    "ts":
+                    {
+                      "type": "date",
+                      "format": "EEE MMM dd HH:mm:ss yyyy"
+                    },
+                    "CIP": { "type": "ip" },
+                    "code": { "type": "keyword" },
+                    "contoller": { "type": "keyword" },
+                    "task": { "type": "keyword" },
+                    "tts":
+                    {
+                      "type": "date",
+                      "format": "MMM dd HH:mm:ss.SSS"
+                    },
+                    "APIP": { "type": "ip" },
+                    "AP": { "type": "keyword" }
+                  }
+                }
+              }
         logstash_pipelines:
           main:
             path.config: "/usr/share/logstash/pipeline/main"
-            filters:
-              - "10-syslog.conf"
             custom_filters: |-
+              filter {
+                if [message] =~ "[0-9|A-Z]" {
+                  dissect {
+                    mapping => {
+                      "message" => "%{ts} %{+ts} %{+ts} %{+ts} %{+ts}: %{CIP}: <%{code}>%{controller}: *%{task}: %{tts} %{+tts} %{+tts}: %%{msg->}"
+                    }
+                  }
+                }
+                if [message] =~ "established to" {
+                  grok {
+                    match => { "msg" => "%{IPV4:APIP}" }
+                    add_field => {"AP" => "%{APIP}"}
+                  }
+                  dns {
+                    reverse => ["AP"]
+                    action => "replace"
+                  }
+                } else {
+                  mutate {
+                    add_tag => [ "Other" ]
+                  }
+                }
+              }
             config: |-
               input {
                 file {
-                  path => "/tmp/syslog.log"
+                  path => "/usr/share/logstash/pipeline/syslog.log"
                   start_position => "beginning"
+                  sincedb_path => "/dev/null"
                 }
               }
               output {
-                elasticsearch {
-                  hosts => {{ logstash_es_output | to_json }}
-                  sniffing => true
-                  index => "AP-%{+YYYY.MM.dd}"
-                }
-                if [index]{
+                if "Other" in [tags] {
+                  stdout { codec => rubydebug }
                   elasticsearch {
-                    hosts => {{ logstash_es_output | to_json }}
-                    sniffing => true
-                    index => "%{index}-%{+YYYY.MM.dd}"
+                    hosts => ["http://172.17.0.2:9200"]
                   }
-                }
-                else {
+                } else {
                   elasticsearch {
-                    hosts => {{ logstash_es_output | to_json }}
-                    sniffing => true
-                    index => "logstash-%{type}-%{+YYYY.MM.dd}"
+                    hosts => ["http://172.17.0.2:9200"]
+                    index => "ap-%{+YYYY.MM.dd}"
+                    manage_template => true
+                    template_overwrite => true
+                    template_name => "ap_template"
+                    template => "/usr/share/logstash/pipeline/{{
+                      logstash_es_template[0]['file'] }}"
                   }
                 }
               }
@@ -75,8 +120,8 @@ groups:
             docker:
               image: 'logstash'
               expose:
-                - 9050
-                - 5044
+                - "9050"
+                - "5044"
               ports:
                 - "9050:9050"
                 - "5044:5044"
@@ -92,8 +137,8 @@ groups:
             docker:
               image: 'elasticsearch'
               expose:
-                - 9200
-                - 9300
+                - "9200"
+                - "9300"
               ports:
                 - "9200:9200"
                 - "9300:9300"
@@ -115,7 +160,7 @@ groups:
             docker:
               image: 'kibana'
               expose:
-                - 5601
+                - "5601"
               ports:
                 - "5601:5601"
               log_driver: 'json-file'
