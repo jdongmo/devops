@@ -1,6 +1,6 @@
 ---
 eips:
-  - ip:
-    instance:
+  - ip: 18.190.73.170
+    instance: proxy
     region: "us-east-2"
 ...

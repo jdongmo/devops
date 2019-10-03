@@ -3,10 +3,12 @@ ansible_python_interpreter: "/usr/bin/python3"
 ansible_ssh_private_key_file: "~/.ssh/id_rsa"
 identityfiles:
   - "{{ ansible_ssh_private_key_file }}"
-linked_hosts: "{{ groups['ec2'] | sort }}"
+linked_hosts:
+  - "{{ groups['ec2'] | sort }}"
+  - "elk-metro"
 force: true
 proxy:
-  ssh_user: ''
-  ssh_host: ''
-  ssh_key: ''
+  ssh_user: 'ubuntu'
+  ssh_host: '18.190.73.170'
+  ssh_key: '~/.ssh/keys/aws-2019-2020'
 ...
