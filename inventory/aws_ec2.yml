@@ -1,0 +1,26 @@
+---
+plugin: aws_ec2
+regions:
+  - us-east-1
+  - ca-central-1
+  - us-east-2
+hostnames:
+  - tag:Name
+  - instance-id
+  - private-dns-name
+  - dns-name
+  - private-ip-address
+  - ip-address
+filters:
+  instance-state-name:
+    - pending
+    - running
+    - shutting-down
+    - stopping
+    - stopped
+compose:
+  ansible_host: public_ip_address | default(private_ip_address, true)
+  provider: 'aws'
+#groups:
+#  ec2: true
+...

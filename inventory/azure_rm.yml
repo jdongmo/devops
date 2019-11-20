@@ -1,0 +1,17 @@
+plugin: azure_rm
+auth_source: auto
+location: canadaeast,canadacentral,eastus
+cloud_environment: "AzureCloud"
+conditional_groups:
+  azure_ec2: true
+default_host_filters:
+  - powerstate != 'running'
+#exclude_host_filters:
+#  - powerstate != 'running'
+hostvar_expressions:
+  ansible_host: (public_ipv4_addresses + private_ipv4_addresses) | first
+  provider: "'azure'"
+#keyed_groups:
+#  - prefix: azure
+#    key: tags.none | default('ec2')
+plain_host_names: yes
