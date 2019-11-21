@@ -1,8 +1,7 @@
 ---
+#ansible_python_interpreter: "/usr/bin/python3"
 #ansible_ssh_common_args: "-o ProxyCommand='ssh -W %h:%p -q {{ proxy.ssh_user }}@{{ proxy.ssh_host }}'"
-ansible_ssh_private_key_file: "~/.ssh/id_rsa"
-ansible_user: ubuntu
-ip_address: "{{ ansible_host | default(inventory_hostname) }}"
+ansible_ssh_private_key_file: "~/.ssh/keys/{{ key_name }}"
 fqdn: "{{ inventory_hostname }}.{{ zone }}"
 mail: "service@testzone.io"
 identityfiles:
@@ -10,8 +9,10 @@ identityfiles:
 ldaps:
   - node: x.x.x.x
     port: 389
-proxy:
-  ssh_user: ''
-  ssh_host: ''
-  ssh_key: "~/.ssh/key/proxy"
+#proxy:
+#  ssh_user: ''
+#  ssh_host: ''
+#  ssh_key: "~/.ssh/key/proxy"
+force: true
+linked_hosts: "{{ groups['all'] | sort }}"
 ...
