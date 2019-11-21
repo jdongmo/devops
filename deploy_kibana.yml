@@ -1,7 +1,7 @@
 ---
 - name: Provision kibana
   hosts:
-    - kibana
+    - all
   gather_facts: yes
   become: yes
   roles:
