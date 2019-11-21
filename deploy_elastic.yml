@@ -8,7 +8,6 @@
     - role: default-packages
     - role: sysctl
     - role: docker-engine
-#    - role: elastic
     - role: docker_deploy
       docker_apps: "{{ elastic_docker_apps }}"
 ...
