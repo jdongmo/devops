@@ -1,0 +1,12 @@
+---
+- name: Provision dockerce
+  hosts:
+    - all
+  gather_facts: yes
+  become: yes
+  become_method: sudo
+  roles:
+    - role: default-packages
+    - role: sysctl
+    - role: docker-engine
+...

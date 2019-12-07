@@ -4,10 +4,8 @@
     - all
   gather_facts: yes
   become: yes
+  become_method: sudo
   roles:
-    - role: default-packages
-    - role: sysctl
-    - role: docker-engine
     - role: docker_deploy
       docker_apps: "{{ elastic_docker_apps }}"
 ...

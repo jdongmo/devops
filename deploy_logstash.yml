@@ -4,8 +4,8 @@
     - all
   gather_facts: yes
   become: yes
+  become_method: sudo
   roles:
-    - role: default-packages
     - role: docker-engine
     - role: logstash
     - role: docker_deploy
