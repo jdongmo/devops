@@ -19,7 +19,9 @@ filters:
     - stopping
     - stopped
 compose:
-  ansible_host: public_ip_address | default(private_ip_address, true)
+  public_address: fqdn | default(public_ip_address, true)
+  private_address: fqdn | default(private_ip_address, true)
+  ansible_host: public_address | default(private_address, true)
   provider: 'aws'
 #groups:
 #  ec2: true

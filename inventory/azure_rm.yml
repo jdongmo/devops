@@ -9,7 +9,9 @@ default_host_filters:
 #exclude_host_filters:
 #  - powerstate != 'running'
 hostvar_expressions:
-  ansible_host: (public_ipv4_addresses + private_ipv4_addresses) | first
+  public_address: fqdn | default(public_ipv4_addresses | first)
+  private_address: fqdn | default(private_ipv4_addresses | first)
+  ansible_host: public_address | default(private_address)
   provider: "'azure'"
 #keyed_groups:
 #  - prefix: azure
