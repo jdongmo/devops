@@ -1,0 +1,7 @@
+---
+ansible_user: ubuntu
+groups:
+  ubuntu:
+    hosts:
+      store:
+...

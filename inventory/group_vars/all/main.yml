@@ -1,9 +1,12 @@
 ---
 #ansible_python_interpreter: "/usr/bin/python3"
 #ansible_ssh_common_args: "-o ProxyCommand='ssh -W %h:%p -q {{ proxy.ssh_user }}@{{ proxy.ssh_host }}'"
+key_name: default-2019-2020
 ansible_ssh_private_key_file: "~/.ssh/keys/{{ key_name }}"
+zone: "dongmo.fr"
 fqdn: "{{ inventory_hostname }}.{{ zone }}"
-mail: "service@testzone.io"
+mail: "service@{{ zone }}"
+ansible_host: "{{ fqdn }}"
 identityfiles:
   - "{{ ansible_ssh_private_key_file }}"
 ldaps:
