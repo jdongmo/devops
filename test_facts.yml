@@ -1,0 +1,11 @@
+---
+- name: az test
+  hosts:
+    - localhost
+  tasks:
+    - aws_az_facts:
+        filters:
+          zone-name:
+            - us-east-1a
+            - us-east-1c
+...

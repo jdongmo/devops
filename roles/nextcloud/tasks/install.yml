@@ -1,0 +1,51 @@
+---
+- name: Install requirements
+  include_role:
+    name: default-packages
+  vars:
+    apt_default_packages:
+      - curl
+      - wget
+      - unzip
+#      - gtar
+      - mariadb-server
+      - libapache2-mod-php7.2
+      - php7.2-gd
+      - php7.2-json
+      - php7.2-mysql
+      - php7.2-curl
+      - php7.2-mbstring
+      - php7.2-intl
+      - php-imagick
+      - php7.2-xml
+      - php7.2-zip
+    yum_default_packages:
+      - epel-release
+      - yum-utils
+      - unzip
+      - curl
+      - wget
+      - gtar
+      - bash-completion
+      - policycoreutils-python
+      - mlocate
+      - bzip2
+      - centos-release-scl
+      - rh-php72 rh-php72-php rh-php72-php-gd rh-php72-php-mbstring rh-php72-php-intl rh-php72-php-pecl-apcu rh-php72-php-mysqlnd rh-php72-php-pecl-redis rh-php72-php-opcache rh-php72-php-imagick
+      - mariadb mariadb-server
+      - redis
+
+- name: Download nextcloud
+  get_url:
+    checksum: "sha256:{{ nextcloud_download_url }}.tar.bz2.sha256"
+    url: "sha256:{{ nextcloud_download_url }}.tar.bz2.sha256"
+    dest: "/tmp/nextcloud-{{ version }}.tar.bz2"
+
+- name: Unpack nextcloud
+  unarchive:
+    copy: false
+    dest: "{{ nextcloud_root_dir }}"
+    keep_newer: true
+    remote_src: true
+    src: "/tmp/nextcloud-{{ version }}.tar.bz2"
+...

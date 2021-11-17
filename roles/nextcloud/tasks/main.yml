@@ -1,0 +1,10 @@
+---
+- name: Set environment
+  include: setenv.yml
+
+- name: Install nextcloud
+  include: install.yml
+
+- name: Configure
+  include: configure.yml
+...

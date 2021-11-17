@@ -1,0 +1,46 @@
+---
+- name: Create Logstash config directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ logstash_conf_dir }}"
+    - "{{ logstash_pipeline_dir }}"
+    - "{{ logstash_ssl_dir }}"
+
+- name: Create Logstash configuration files.
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ logstash_conf_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - logstash.yml
+    - jvm.options
+    - log4j2.properties
+    - pipelines.yml
+    - startup.options
+
+- name: Pipeline configuration.
+  include: pipeline.yml
+  with_items: "{{ logstash_pipelines }}"
+
+- name: Warn user if using insecure SSL key pair.
+  debug:
+    msg: >
+      ***SECURITY RISK***: You are currently using the included/default SSL key
+      pair. Please generate your own secure key pair if using this playbook for
+      any kind of production purposes!
+  when: "logstash_ssl_certificate_file.find('-example.crt') != -1"
+
+- name: Copy SSL key and cert for logstash-forwarder.
+  copy:
+    src: "ssl/{{ item }}"
+    dest: "{{ logstash_ssl_dir }}/{{ item | basename }}"
+    mode: 0644
+  with_items:
+    - "{{ logstash_ssl_key_file }}"
+    - "{{ logstash_ssl_certificate_file }}"
+    - "{{ logstash_ssl_ca_file | default(omit, true) }}"
+...

@@ -1,0 +1,39 @@
+---
+- name: Create Logstash pipelines directories
+  file:
+    path: "{{ logstash_pipeline_dir }}/{{ logstash_pipelines[item]['path.config'] | relpath('/usr/share/logstash/pipeline') }}"
+    state: directory
+
+- name: Create Logstash pipeline config.
+  template:
+    src: "logstash.conf.j2"
+    dest: "{{ logstash_pipeline_dir }}/{{ logstash_pipelines[item]['path.config'] | relpath('/usr/share/logstash/pipeline') }}/pipeline.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy over Logstash pipeline filters.
+  copy:
+    src: "filters/{{ filter }}"
+    dest: "{{ logstash_pipeline_dir }}/{{
+      logstash_pipelines[item]['path.config'] |
+      relpath('/usr/share/logstash/pipeline') }}/{{ filter }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ logstash_pipelines[item]['filters'] }}"
+  loop_control:
+    loop_var: "filter"
+  when: logstash_pipelines[item]['filters'] is defined
+
+- name: Create Logstash custom filters
+  template:
+    src: "filter.conf.j2"
+    dest: "{{ logstash_pipeline_dir }}/{{
+      logstash_pipelines[item]['path.config'] |
+      relpath('/usr/share/logstash/pipeline') }}/filter.conf"
+    owner: root
+    group: root
+    mode: 0644
+  when: logstash_pipelines[item]['custom_filters'] is defined
+...

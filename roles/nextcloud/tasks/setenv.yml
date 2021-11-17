@@ -1,0 +1,8 @@
+---
+- name: Create required directory
+  file:
+    state: directory
+    path: "{{ item }}"
+  loop:
+    - "{{ nextcloud_root_dir }}"
+...

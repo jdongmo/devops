@@ -1,0 +1,53 @@
+---
+elastic_conf_dir: /etc/elasticsearch
+elastic_pipeline_dir: /etc/elasticsearch/conf.d
+elastic_ssl_dir: /etc/pki/elastic
+elastic_ssl_certificate_file: elastic-forwarder-example.crt
+elastic_ssl_key_file: elastic-forwarder-example.key
+elastic_settings:
+  - http.host: "0.0.0.0"
+  - path.data: /usr/share/elasticsearch/data
+  - dead_letter_queue.enable: True
+elastic_heap_size: "{{ (ansible_memory_mb.real.total - 1024) | int }}m"
+elastic_jmxremote_port: 9050
+elastic_listen_port_lumberjack: 5000
+elastic_elasticsearch_host: localhost
+elastic_local_syslog_path: /var/log/syslog
+elastic_java_opts: >-
+  -Dcom.sun.management.jmxremote.port={{ elastic_jmxremote_port }}
+  -Dcom.sun.management.jmxremote.local.only=false
+  -Dcom.sun.management.jmxremote.authenticate=false
+  -Dcom.sun.management.jmxremote.ssl=false
+  -Djava.rmi.server.hostname=0.0.0.0
+elastic_pipelines:
+  main:
+    path.config: "/usr/share/elasticsearch/pipeline"
+    filters:
+      - 10-syslog.conf
+      - 11-nginx.conf
+      - 12-apache.conf
+      - 14-solr.conf
+      - 15-drupal.conf 
+    custom_filters: |-
+      filter {
+      }
+    config: |-
+      input {
+        lumberjack {
+          port => {{ elastic_listen_port_lumberjack }}
+          type => "logs"
+          ssl_certificate => "{{ elastic_ssl_dir }}/{{ elastic_ssl_certificate_file | basename}}"
+          ssl_key => "{{ elastic_ssl_dir }}/{{ elastic_ssl_key_file | basename}}"
+        }
+      }
+      input {
+        file {
+          path => "{{ elastic_local_syslog_path }}"
+        }
+      }
+      output {
+        elasticsearch {
+          host => {{ elastic_elasticsearch_host }}
+        }
+      }
+...

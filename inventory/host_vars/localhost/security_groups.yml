@@ -1,29 +1,24 @@
 ---
 secgroups:
-  - description: "Allow incoming ssh"
-    filters:
-    group_id:
-    group_name: "ssh-22"
-    ip_permissions:
-      - proto: tcp
-        from_port: 22
-        to_port: 22
-        cidr_ip: "0.0.0.0/0"
-    ip_permissions_egress: []
-    purge_rules:
-    purge_rules_egress:
-    purge_tags:
-    tags:
-      "env": "test"
-      "provisioner": "ansible"
-    vpc_name: "test-vpc"
-    region: "us-east-2"
   - description: "Allow incoming http"
     group_name: "http-80"
     ip_permissions:
       - proto: tcp
         from_port: 80
         to_port: 80
+        cidr_ip: "0.0.0.0/0"
+    ip_permissions_egress: []
+    tags:
+      "env": "test"
+      "provisioner": "ansible"
+    vpc_name: "test-vpc"
+    region: "us-east-2"
+  - description: "Allow incoming ssh"
+    group_name: "ssh-22"
+    ip_permissions:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
         cidr_ip: "0.0.0.0/0"
     ip_permissions_egress: []
     tags:

@@ -1,0 +1,11 @@
+---
+- name: Nextcloud
+  hosts:
+    - all
+  become: yes
+  roles:
+    - role: nginx
+      tags: nginx
+    - role: nextcloud
+      tags: nextcloud
+...

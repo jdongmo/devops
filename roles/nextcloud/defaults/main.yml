@@ -1,0 +1,14 @@
+---
+nginx_version: "1.*"
+ssl_dir: "/app/ssl"
+nextcloud_root_dir: "/app/nextcloud"
+nextcloud_version: "17.0.1"
+nextcloud_download_url: "https://download.nextcloud.com/server/releases/nextcloud-{{ nextcloud_version }}"
+nextcloud_webserver: "nginx" #nginx, apache2, httpd
+nextcloud_port: 80
+nextcloud_domain: "nextcloud.domain.tld"
+nextcloud_protocol: "https" #https, http
+nextcloud_cert_country: "CA"
+nextcloud_cert_city: "Greenfield Park"
+nextcloud_cert_state: "Quebec"
+...

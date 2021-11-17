@@ -1,0 +1,55 @@
+---
+groups:
+  all:
+    hosts:
+      store:
+        app_dir: "/app"
+        apt_default_packages:
+          - python3
+          - python3-pip
+        sysctl_options:
+          vm.max_map_count: 262144
+          vm.nr_hugepages: -1
+        dockerce_version: "=5*"
+        docker_home: "{{ app_dir }}/docker"
+        storage_driver: "overlay"
+        certbot_key_size: 4096
+        certbot_mail: "{{ mail }}"
+        nextcloud_domain: "{{ fqdn }}"
+        nextcloud_port: 443
+        nginx_version: "1.*"
+        virtualhosts:
+          - type: "{{ nextcloud_protocol }}"
+            server_name: "{{ nextcloud_domain }}"
+            port: "{{ nextcloud_port }}"
+            root: "{{ nextcloud_root_dir }}"
+            proxy_protocol: false
+            client_side_certificate: false
+            locations:
+              - regex: "/robots.txt"
+                config: |-
+                  allow all;
+                  log_not_found off;
+                  access_log off;
+            upstreams:
+              - name: "php-handler"
+                path: "nextcloud"
+                servers:
+                  - domain: localhost
+                    port: 9000
+        ca_config:
+          country: "{{ nextcloud_cert_country }}"
+          state: "{{ nextcloud_cert_state }}"
+          org: "Company inc."
+          unit: "Unit"
+          fqdn: "{{ nextcloud_domain }}"
+          mail: "{{ mail }}"
+        csr_config:
+          country: "{{ nextcloud_cert_country }}"
+          state: "{{ nextcloud_cert_state }}"
+          city: "{{ nextcloud_cert_city }}"
+          org: "Company inc."
+          unit: "Unit"
+          fqdn: "{{ nextcloud_domain }}"
+          mail: "{{ mail }}"
+...

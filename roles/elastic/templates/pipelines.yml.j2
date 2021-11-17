@@ -1,0 +1,13 @@
+# This file is where you define your pipelines. You can define multiple.
+# For more information on multiple pipelines, see the documentation:
+#   https://www.elastic.co/guide/en/logstash/current/multiple-pipelines.html
+# managed by ansible do not modify by hand
+
+{% for id in logstash_pipelines.keys() %}
+- pipeline.id: {{ id }}
+  {% for val in logstash_pipelines[id].keys() %}
+    {%- if val != 'filters' and val != 'custom_filters' and val != 'config' %}
+{{ val }}: {{ logstash_pipelines[id][val] }}
+    {%- endif %}
+  {% endfor %}
+{% endfor %}

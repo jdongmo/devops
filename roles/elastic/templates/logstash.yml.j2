@@ -1,0 +1,6 @@
+# Settings file in YAML
+# managed by ansible do not modify by hand
+
+{% for setting in logstash_settings %}
+{{ setting | to_yaml | replace('{', '') | replace('}', '') }}
+{% endfor %}

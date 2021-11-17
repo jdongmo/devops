@@ -2,15 +2,38 @@
 instances:
   - assign_public_ip: true
     count_tag:
-    security_group_names: "ssh-22,icmp-8"
+    security_group_names: "ssh-22,icmp-8,https-443"
     ec2_image_id: "ami-05c1fa8df71875112"
     exact_count: 1
     instance_tags:
       env: "test"
+      os: "ubuntu"
       provisioner: "ansible"
       Name: "proxy"
       domain: "testzone.io"
-    instance_type: "t2.micro"
+    instance_type: "t3.micro"
+    ec2_key_name: "aws-2019-2020"
+    ec2_monitored: False
+    ec2_region: "us-east-2"
+    vpc_subnet: "test-subnet"
+    volumes:
+      - device_name: '/dev/sda1'
+        delete_on_termination: true
+        encrypted: false
+        volume_type: gp2      #io1,gp2,st1,sc1
+        volume_size: 100      # GB
+  - assign_public_ip: true
+    count_tag:
+    security_group_names: "ssh-22,icmp-8,https-443"
+    ec2_image_id: "ami-0f2b4fc905b0bd1f1"
+    exact_count: 1
+    instance_tags:
+      env: "test"
+      os: "centos"
+      provisioner: "ansible"
+      Name: "elk"
+      domain: "testzone.io"
+    instance_type: "t3.medium"
     ec2_key_name: "aws-2019-2020"
     ec2_monitored: False
     ec2_region: "us-east-2"

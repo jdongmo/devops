@@ -1,0 +1,8 @@
+FROM kibana:7.3.2
+USER root
+ENV PATH /usr/share/kibana/bin:$PATH
+RUN yum install -y sudo && curl -sL https://rpm.nodesource.com/setup_10.x | sudo -E bash - && \
+    yum install -y nodejs && npm install yarn -g
+RUN kibana-plugin install --allow-root https://github.com/flexmonster/pivot-kibana/releases/download/v1.21/flexmonster_pivot-v1.21.zip
+RUN cd plugins/flexmonster_pivot && pwd && ls -la && yarn upgrade
+USER kibana
